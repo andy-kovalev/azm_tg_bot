@@ -1,6 +1,6 @@
 import pytest
 
-from bot.utils.text import mdv2_escape, mdv2_bold, _E, _B
+from tg_bot.bot.utils.text import mdv2_escape, mdv2_bold, _E, _B
 
 # MARKDOWN_V2 escape symbol
 ES = '\\'
