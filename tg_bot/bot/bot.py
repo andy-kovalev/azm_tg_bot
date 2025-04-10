@@ -4,7 +4,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.fsm.storage.memory import MemoryStorage
 # from aiogram.fsm.storage.redis import RedisStorage
 
-from tg_bot import settings
+import settings
 
 try:
     bot = Bot(token=settings.BOT_TOKEN)

@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 import pytest
 
-import settings
+from tg_bot import settings
 
 EXCLUDE_PARAM = 'EXCLUDE'
 
@@ -102,8 +102,8 @@ def test_settings_params(test_env_settings, default_test_settings):
         elif param in default_test_settings.keys():
             assert str(getattr(settings, param)) == str(default_test_settings[param])
         else:
-            # атрибут добавлен в settings.py и не указан в .env файле или default_test_settings() фикстуре
-            assert False
+            pytest.fail(
+                f'Атрибут {param} добавлен в settings.py и не указан в .env файле или default_test_settings() фикстуре')
 
 
 def test_settings__env_filename(monkeypatch):
