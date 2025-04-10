@@ -73,7 +73,7 @@ def get_connect_uri(protocol, resource, address, port=None, user=None, password=
     :param password: пароль пользователя
     :return: URI подключения к в формате protocol://[user:password@]address[:port]/resource
     """
-    user_str = f'{user}{f':{password}' if password else ''}@' if user else ''
+    user_str = f'{user}{f":{password}" if password else ""}@' if user else ''
     port_str = f':{port}' if port else ''
 
     return '%s://%s%s%s/%s' % (protocol, user_str, address, port_str, resource) if address else ''
