@@ -7,7 +7,7 @@ from aiogram import Dispatcher
 
 __all__ = []
 
-for loader, module_name, is_pkg in pkgutil.walk_packages(__path__):
+for _loader, module_name, _is_pkg in pkgutil.walk_packages(__path__):
     __all__.append(module_name)
 
     _spec = spec_from_file_location(module_name, location=path.join(__path__[0], module_name + '.py'))
