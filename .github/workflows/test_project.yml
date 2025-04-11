@@ -48,4 +48,4 @@ jobs:
       - name: Pytest Test
         run: python3 -m pytest --cov=tg_bot --cov-report term
         env:
-          ENV_FILENAME: ${{ env.ENV_FILENAME }}
+          ENV_FILENAME: ./.env/test.env

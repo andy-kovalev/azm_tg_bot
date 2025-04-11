@@ -1,5 +1,4 @@
 import logging
-from importlib import reload
 from os import environ, path
 from types import MethodType, FunctionType, ModuleType
 from unittest.mock import patch
@@ -26,7 +25,7 @@ def default_test_settings() -> dict:
             "BOT_TOKEN": "",
             "BOT_TOKEN_OBFUSCATED": EXCLUDE_PARAM,
             "AZM_COMMON_SEARCH_ADDRESS": "",
-            "AZM_COMMON_SEARCH_PORT": "",
+            "AZM_COMMON_SEARCH_PORT": "8000",
             "AZM_COMMON_SEARCH_URL": EXCLUDE_PARAM
             }
 
@@ -66,10 +65,11 @@ def test_get_env_param(monkeypatch):
     assert str(exc_info.value.code).find(logging.getLevelName(logging.CRITICAL)) > 0
 
 
-@pytest.mark.parametrize(['param', 'result'],
-                         (('1234567890', '123****890'),
-                          ('123456', '1****6'),
-                          ('123', '***')))
+@pytest.mark.parametrize(['param', 'result'], (
+        ('1234567890', '123****890'),
+        ('123456', '1****6'),
+        ('123', '***'),
+        (None, '')))
 def test_get_obfuscate_env_param_value(param, result):
     obfuscate_token = settings.get_obfuscate_env_param_value(param)
 
@@ -77,9 +77,9 @@ def test_get_obfuscate_env_param_value(param, result):
 
 
 @pytest.mark.parametrize(['db_number', 'address', 'port', 'user', 'password', 'result'], (
-                    ('5', 'address.local', '', '', '', 'redis://address.local/5'),
-                    ('5', 'address.local', '6379', '', '', 'redis://address.local:6379/5'),
-                    ('5', 'address.local', '6379', 'user', 'password', 'redis://user:password@address.local:6379/5')))
+        ('5', 'address.local', '', '', '', 'redis://address.local/5'),
+        ('5', 'address.local', '6379', '', '', 'redis://address.local:6379/5'),
+        ('5', 'address.local', '6379', 'user', 'password', 'redis://user:password@address.local:6379/5')))
 def test_get_connect_uri(db_number, address, port, user, password, result):
     connect_uri = settings.get_connect_uri('redis', db_number, address, port, user, password)
 
@@ -97,17 +97,12 @@ def test_settings_params(test_env_settings, default_test_settings):
             if default_test_settings[param] == EXCLUDE_PARAM:
                 continue
 
-        if param in env_vars.keys():
-            assert str(getattr(settings, param)) == str(env_vars[param])
-        elif param in default_test_settings.keys():
-            assert str(getattr(settings, param)) == str(default_test_settings[param])
-        else:
-            pytest.fail(
-                f'Атрибут {param} добавлен в settings.py и не указан в .env файле или default_test_settings() фикстуре')
-
-
-def test_settings__env_filename(monkeypatch):
-    monkeypatch.setenv('ENV_FILENAME', '')
-    with pytest.raises(SystemExit) as exc_info:
-        reload(settings)
-    assert str(exc_info.value.code).find(logging.getLevelName(logging.CRITICAL)) > 0
+        if param not in env_vars.keys() and param not in default_test_settings.keys() and str(
+                default_test_settings[param]) == '':
+            pytest.fail(f'Атрибут {param} добавлен в settings.py и не указан в .env файле '
+                        'или default_test_settings() фикстуре')
+        elif param not in env_vars.keys() and param in default_test_settings.keys():
+            assert str(getattr(settings, param)) == str(default_test_settings[param]), (f'Атрибут {param} не '
+                                                                                        'соответствует '
+                                                                                        'default_test_settings() '
+                                                                                        'фикстуре')

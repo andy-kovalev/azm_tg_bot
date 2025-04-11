@@ -55,10 +55,12 @@ def get_obfuscate_env_param_value(value):
     def fill_asterisk(fill_count):
         return '*' * fill_count
 
-    if len(value) > 3:
+    if not value or len(value) == 0:
+        return ''
+    elif len(value) > 3:
         inx = 1 if len(value) < 9 else 3
         return value[:inx] + fill_asterisk(len(value) - inx * 2) + value[-inx:]
-    else:
+    elif len(value) > 0:
         return fill_asterisk(len(value))
 
 
@@ -83,10 +85,6 @@ def get_connect_uri(protocol, resource, address, port=None, user=None, password=
 ENV_FILENAME = path.abspath(getenv('ENV_FILENAME', default='.env'))
 if path.exists(ENV_FILENAME) and path.isfile(ENV_FILENAME):
     load_dotenv(ENV_FILENAME)
-else:
-    exit('%s %s: root: settings: environment variable ENV_FILENAME=%s, файл не найден' % (
-        datetime.now().isoformat(sep=' ', timespec='milliseconds'), logging.getLevelName(logging.CRITICAL),
-        ENV_FILENAME))
 
 # logging param
 # Имя файла для записи логов
@@ -97,6 +95,7 @@ LOG_LEVEL = logging.getLevelName(getenv('LOG_LEVEL', default='INFO'))
 
 configure_logging(LOG_FILE_NAME, LOG_LEVEL)
 
+logging.debug('settings: ENV_FILENAME=%s', ENV_FILENAME)
 logging.debug('settings: LOG_FILE_NAME=%s', LOG_FILE_NAME)
 logging.debug('settings: LOG_LEVEL=%s', logging.getLevelName(LOG_LEVEL))
 logging.debug('%s', '-' * 20)
