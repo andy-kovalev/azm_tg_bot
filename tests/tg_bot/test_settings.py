@@ -90,7 +90,7 @@ def test_settings_params(test_env_settings, default_test_settings):
     env_vars = test_env_settings
 
     settings_param = [v for v in vars(settings) if not isinstance(getattr(settings, v), (
-        type, MethodType, FunctionType, ModuleType)) and not v.startswith('__')]
+        type, MethodType, FunctionType, ModuleType)) and not v.startswith('__') and v != 'environ']
 
     for param in settings_param:
         if param in default_test_settings.keys():
