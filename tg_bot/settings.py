@@ -13,7 +13,7 @@
 
 import logging
 from datetime import datetime
-from os import path, getenv
+from os import path, getenv, environ
 
 from dotenv import load_dotenv
 
@@ -81,6 +81,17 @@ def get_connect_uri(protocol, resource, address, port=None, user=None, password=
     return '%s://%s%s%s/%s' % (protocol, user_str, address, port_str, resource) if address else ''
 
 
+def set_bot_token_from_file(param):
+    def get_text_from_file(file_name):
+        with open(file_name, 'r') as text_file:
+            text = text_file.read()
+        return text.strip()
+
+    param_value = path.abspath(getenv(param))
+    if path.exists(param_value) and path.isfile(param_value):
+        environ[param] = get_text_from_file(param_value)
+
+
 # .env файл для загрузки параметров
 ENV_FILENAME = path.abspath(getenv('ENV_FILENAME', default='.env'))
 if path.exists(ENV_FILENAME) and path.isfile(ENV_FILENAME):
@@ -102,6 +113,7 @@ logging.debug('%s', '-' * 20)
 
 # bot param
 # Токен Telegram бота
+set_bot_token_from_file('BOT_TOKEN')
 BOT_TOKEN_OBFUSCATED = get_obfuscate_env_param_value(getenv('BOT_TOKEN'))
 BOT_TOKEN = get_env_param('BOT_TOKEN', required=True, log_text=BOT_TOKEN_OBFUSCATED)
 
