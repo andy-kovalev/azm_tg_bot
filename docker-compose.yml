@@ -1,0 +1,28 @@
+version: '3.8'
+
+networks:
+  azm_tg_bot_network:
+
+services:
+  azm_tg_bot:
+    build:
+      context: .
+      dockerfile: tg_bot.DockerFile
+    command: python3 /usr/src/__main__.py
+    volumes:
+      - ./tg_bot:/usr/src
+      - ./tests/logs:/var/log
+    env_file:
+      - ./.env/docker.env
+    environment:
+      - LOG_LEVEL=${LOG_LEVEL}
+      - LOG_FILE_NAME=/var/log/azm_tg_bot.log
+      - BOT_TOKEN=${BOT_TOKEN}
+      - AZM_COMMON_SEARCH_ADDRESS=${AZM_COMMON_SEARCH_ADDRESS}
+      - AZM_COMMON_SEARCH_PORT=${AZM_COMMON_SEARCH_PORT}
+    container_name: tg_bot
+    restart: unless-stopped
+    networks:
+      azm_tg_bot_network:
+        aliases:
+          - host-tg_bot
