@@ -9,5 +9,8 @@ WORKDIR /usr/src_run_config/
 COPY ./requirements.txt ./requirements.txt
 RUN pip3 install --no-cache-dir --upgrade -r ./requirements.txt
 
+COPY ./.key/azm_tg_bot.key ./azm_tg_bot.key
+RUN chmod 400 ./azm_tg_bot.key
+
 WORKDIR /usr/src/
 COPY ./tg_bot ./
