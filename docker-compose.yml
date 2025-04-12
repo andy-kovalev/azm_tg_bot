@@ -2,6 +2,8 @@ version: '3.8'
 
 networks:
   azm_tg_bot_network:
+    external:
+      name: azm_network
 
 services:
   azm_tg_bot:
@@ -12,13 +14,15 @@ services:
     volumes:
       - ./tg_bot:/usr/src
       - ./tests/logs:/var/log
+    expose:
+      - 8000
     env_file:
       - ./.env/docker.env
     environment:
       - LOG_LEVEL=${LOG_LEVEL}
       - LOG_FILE_NAME=/var/log/azm_tg_bot.log
       - BOT_TOKEN=${BOT_TOKEN}
-      - AZM_COMMON_SEARCH_ADDRESS=${AZM_COMMON_SEARCH_ADDRESS}
+      - AZM_COMMON_SEARCH_ADDRESS=host-common_search
       - AZM_COMMON_SEARCH_PORT=${AZM_COMMON_SEARCH_PORT}
     container_name: tg_bot
     restart: unless-stopped
