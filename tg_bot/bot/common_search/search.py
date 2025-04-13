@@ -9,7 +9,7 @@ from settings import AZM_COMMON_SEARCH_URL
 
 async def search(search_text: str):
     result_list = []
-    url = ''.join((AZM_COMMON_SEARCH_URL, '/search'))
+    url = ''.join((AZM_COMMON_SEARCH_URL, 'search/'))
     try:
         response = requests.get(url, {"text": search_text})
         if response.status_code == OK:
