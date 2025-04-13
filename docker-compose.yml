@@ -14,6 +14,7 @@ services:
     volumes:
       - ./tg_bot:/usr/src
       - ./tests/logs:/var/log
+      - ./.key:/usr/src_run_config/.key
     expose:
       - 8000
     env_file:
@@ -21,7 +22,7 @@ services:
     environment:
       - LOG_LEVEL=${LOG_LEVEL}
       - LOG_FILE_NAME=/var/log/azm_tg_bot.log
-      - BOT_TOKEN=/usr/src_run_config/azm_tg_bot.key
+      - BOT_TOKEN=/usr/src_run_config/.key/azm_tg_bot.key
       - AZM_COMMON_SEARCH_ADDRESS=host-common_search
       - AZM_COMMON_SEARCH_PORT=${AZM_COMMON_SEARCH_PORT}
     container_name: tg_bot
