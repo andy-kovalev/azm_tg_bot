@@ -1,6 +1,8 @@
 from aiogram.enums import ChatType, ContentType
 from aiogram.types import Message, CallbackQuery
 
+import settings
+
 
 # lambda msg: msg.chat.type == ChatType.PRIVATE
 def _get_message(message):
@@ -32,5 +34,21 @@ async def filter_content_type_text(message) -> bool:
     msg: Message = _get_message(message)
     if msg:
         return msg.content_type == ContentType.TEXT
+    else:
+        return False
+
+
+async def filter_content_type_document(message) -> bool:
+    msg: Message = _get_message(message)
+    if msg:
+        return msg.content_type == ContentType.DOCUMENT
+    else:
+        return False
+
+
+async def filter_content_admin_user(message) -> bool:
+    msg: Message = _get_message(message)
+    if msg:
+        return msg.from_user.username.upper() in settings.ADMINS
     else:
         return False

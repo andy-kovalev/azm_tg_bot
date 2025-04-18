@@ -33,7 +33,7 @@ def configure_logging(log_file_name, log_level):
 
 
 def get_env_param(name: str, required: bool = False, default=None, log_text=None):
-    result = getenv(name, default=default if default else None)
+    result = getenv(name, default=default if default else '')
     if required and not result:
         exit('%s %s: root: settings: %s не задан' % (
             datetime.now().isoformat(sep=' ', timespec='milliseconds'), logging.getLevelName(logging.CRITICAL), name))
@@ -128,3 +128,9 @@ AZM_COMMON_SEARCH_PORT = get_int_env_param('AZM_COMMON_SEARCH_PORT', default='80
 
 # Вычисляемы параметр для внутреннего удобства
 AZM_COMMON_SEARCH_URL = get_connect_uri('http', '', AZM_COMMON_SEARCH_ADDRESS, AZM_COMMON_SEARCH_PORT)
+
+# admin param
+# Список имен пользователей Telegram (UserName), которые оладают администраторскими правами
+# эти пользователи будут иметь возможность импортировать файл и скачивать статистику
+ADMINS = get_env_param('ADMINS')
+ADMINS = ADMINS.replace('@', '').upper().split(',')

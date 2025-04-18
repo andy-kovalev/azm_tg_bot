@@ -29,3 +29,7 @@ MAX_MESSAGE_SYMBOL_LENGTH = 9500
 MAX_FOUND_SEARCH_COUNT = 10
 
 MAX_FOUND_SEARCH_TEXT = (f'{_B}Ещё{_B} найдено {_B}%s товаров{_B} в каталоге, уточните поиск {_E}.{_E}.{_E}.')
+
+UPLOAD_FILE_SUCCESS_TEXT = 'Файл успешно загружен и используется для поиска наличия запасных частей'
+
+UPLOAD_FILE_ERROR_TEXT = 'Ошибка загрузки файла, обратитесь к разработчику сервиса'

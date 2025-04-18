@@ -26,8 +26,8 @@ def default_test_settings() -> dict:
             "BOT_TOKEN_OBFUSCATED": EXCLUDE_PARAM,
             "AZM_COMMON_SEARCH_ADDRESS": "",
             "AZM_COMMON_SEARCH_PORT": "8000",
-            "AZM_COMMON_SEARCH_URL": EXCLUDE_PARAM
-            }
+            "AZM_COMMON_SEARCH_URL": EXCLUDE_PARAM,
+            "ADMINS": [""]}
 
 
 @pytest.fixture(autouse=True)
