@@ -18,10 +18,15 @@ from os import path, getenv, environ
 from dotenv import load_dotenv
 
 
-def configure_logging(log_file_name, log_level):
+def search_logging():
+    return logging.getLogger('SEARCH')
+
+
+def configure_logging(log_file_name, search_log_file_name, log_level, log_format):
     """
     Настройка логирования
     """
+    # default logging
     handlers = []
     if log_file_name:
         file_log = logging.FileHandler(log_file_name, encoding='utf-8')
@@ -29,7 +34,17 @@ def configure_logging(log_file_name, log_level):
     console_out = logging.StreamHandler()
     handlers.append(console_out)
 
-    logging.basicConfig(handlers=handlers, level=log_level, format='%(asctime)s %(levelname)s: %(name)s: %(message)s')
+    logging.basicConfig(handlers=handlers, level=log_level, format=log_format)
+
+    # search logging
+    _search_logging = search_logging()
+    handlers = []
+    if search_log_file_name:
+        handler_search_file = logging.FileHandler(search_log_file_name, encoding='utf-8')
+        handler_search_file.setFormatter(logging.Formatter(log_format))
+
+        _search_logging.setLevel(logging.INFO)
+        _search_logging.addHandler(handler_search_file)
 
 
 def get_env_param(name: str, required: bool = False, default=None, log_text=None):
@@ -101,14 +116,20 @@ if path.exists(ENV_FILENAME) and path.isfile(ENV_FILENAME):
 # Имя файла для записи логов
 LOG_FILE_NAME = path.abspath(getenv('LOG_FILE_NAME', default='azm_tg_bot.log'))
 
+# Имя файла для записи логов http запросов
+SEARCH_LOG_FILE_NAME = path.abspath(getenv('SEARCH_LOG_FILE_NAME', default='azm_tg_bot_search.log'))
+SEARCH_LOG_SEPARATOR = ';'
+
 # Уровень записи логов ERROR, WARNING, DEBUG, INFO
 LOG_LEVEL = logging.getLevelName(getenv('LOG_LEVEL', default='INFO'))
+LOG_FORMAT = getenv('LOG_FORMAT', default='%(asctime)s %(levelname)s: %(name)s: %(message)s')
 
-configure_logging(LOG_FILE_NAME, LOG_LEVEL)
+configure_logging(LOG_FILE_NAME, SEARCH_LOG_FILE_NAME, LOG_LEVEL, LOG_FORMAT)
 
 logging.debug('settings: ENV_FILENAME=%s', ENV_FILENAME)
 logging.debug('settings: LOG_FILE_NAME=%s', LOG_FILE_NAME)
 logging.debug('settings: LOG_LEVEL=%s', logging.getLevelName(LOG_LEVEL))
+logging.debug('settings: SEARCH_LOG_FILE_NAME=%s', SEARCH_LOG_FILE_NAME)
 logging.debug('%s', '-' * 20)
 
 # bot param

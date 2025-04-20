@@ -21,7 +21,10 @@ def default_test_settings() -> dict:
     """
     return {"ENV_FILENAME": ".env",
             "LOG_FILE_NAME": path.abspath("azm_tg_bot.log"),
+            "SEARCH_LOG_FILE_NAME": path.abspath("azm_tg_bot_search.log"),
+            "SEARCH_LOG_SEPARATOR": EXCLUDE_PARAM,
             "LOG_LEVEL": EXCLUDE_PARAM,
+            "LOG_FORMAT": EXCLUDE_PARAM,
             "BOT_TOKEN": "",
             "BOT_TOKEN_OBFUSCATED": EXCLUDE_PARAM,
             "AZM_COMMON_SEARCH_ADDRESS": "",
