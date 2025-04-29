@@ -37,6 +37,7 @@ async def txt_search(message: types.Message, state: FSMContext):
             if len(result_search_list) > 0:
                 result_message_text = ''
                 search_item_count = 0
+                result_search_count = len(result_search_list)
                 for search_item in result_search_list:
                     items_text = ''
                     available_count = search_item['available_count']
@@ -51,7 +52,6 @@ async def txt_search(message: types.Message, state: FSMContext):
 
                     search_item_count += 1
                     if search_item_count == MAX_FOUND_SEARCH_COUNT:
-                        result_search_count = len(result_search_list)
                         result_message_text += MAX_FOUND_SEARCH_TEXT % str(result_search_count - MAX_FOUND_SEARCH_COUNT)
 
                         break
