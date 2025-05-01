@@ -24,6 +24,7 @@ PRICE_ITEM_TEXT = f'''{_B}%(part_number)s{_B} %(name)s
 %(available_text)s
 '''
 
+# ограничение Telegram на длину сообщения
 MAX_MESSAGE_SYMBOL_LENGTH = 9500
 
 MAX_FOUND_SEARCH_COUNT = 10
