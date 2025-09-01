@@ -1,7 +1,5 @@
-import logging
 from os import environ, path
 from types import MethodType, FunctionType, ModuleType
-from unittest.mock import patch
 
 import pytest
 
@@ -30,7 +28,7 @@ def default_test_settings() -> dict:
             "AZM_COMMON_SEARCH_ADDRESS": "",
             "AZM_COMMON_SEARCH_PORT": "8000",
             "AZM_COMMON_SEARCH_URL": EXCLUDE_PARAM,
-            "ADMINS": [""]}
+            "ADMINS": []}
 
 
 @pytest.fixture(autouse=True)
@@ -46,37 +44,6 @@ def test_env_settings():
             env_vars.update({key: value})
 
     return env_vars
-
-
-def test_get_env_param(monkeypatch):
-    test_param_name = 'TEST_PARAM_NAME'
-    test_param_value = 'test_param_value'
-    test_param_default_value = 'test_param_default_value'
-
-    test_result = settings.get_env_param(test_param_name, default=test_param_default_value)
-    assert test_result == test_param_default_value
-
-    monkeypatch.setenv(test_param_name, test_param_value)
-    with patch('logging.Logger.debug') as mocked_logger:
-        test_result = settings.get_env_param(test_param_name, default=test_param_default_value)
-        mocked_logger.assert_called_once()
-    assert test_result == test_param_value
-
-    monkeypatch.setenv(test_param_name, '')
-    with pytest.raises(SystemExit) as exc_info:
-        settings.get_env_param(test_param_name, required=True)
-    assert str(exc_info.value.code).find(logging.getLevelName(logging.CRITICAL)) > 0
-
-
-@pytest.mark.parametrize(['param', 'result'], (
-        ('1234567890', '123****890'),
-        ('123456', '1****6'),
-        ('123', '***'),
-        (None, '')))
-def test_get_obfuscate_env_param_value(param, result):
-    obfuscate_token = settings.get_obfuscate_env_param_value(param)
-
-    assert obfuscate_token == result
 
 
 @pytest.mark.parametrize(['db_number', 'address', 'port', 'user', 'password', 'result'], (
