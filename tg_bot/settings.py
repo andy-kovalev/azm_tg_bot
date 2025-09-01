@@ -18,8 +18,8 @@ from env_settings import configure, load_env_params
 from env_settings import get_str_env_param, get_int_env_param, get_values
 from env_settings.utils import _get_obfuscate_value as get_obfuscate_value
 
-
 configure(error_handling='exit', do_value_logging=True)
+
 
 def search_logging():
     return logging.getLogger('SEARCH')
