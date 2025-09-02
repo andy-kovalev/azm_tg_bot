@@ -46,16 +46,6 @@ def test_env_settings():
     return env_vars
 
 
-@pytest.mark.parametrize(['db_number', 'address', 'port', 'user', 'password', 'result'], (
-        ('5', 'address.local', '', '', '', 'redis://address.local/5'),
-        ('5', 'address.local', '6379', '', '', 'redis://address.local:6379/5'),
-        ('5', 'address.local', '6379', 'user', 'password', 'redis://user:password@address.local:6379/5')))
-def test_get_connect_uri(db_number, address, port, user, password, result):
-    connect_uri = settings.get_connect_uri('redis', db_number, address, port, user, password)
-
-    assert connect_uri == result
-
-
 def test_settings_params(test_env_settings, default_test_settings):
     env_vars = test_env_settings
 

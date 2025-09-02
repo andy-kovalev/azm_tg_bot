@@ -16,7 +16,7 @@ from os import path, getenv
 
 from env_settings import configure, load_env_params
 from env_settings import get_str_env_param, get_int_env_param, get_values
-from env_settings.utils import _get_obfuscate_value as get_obfuscate_value
+from env_settings.utils import get_obfuscate_value, get_connect_uri
 
 configure(error_handling='exit', do_value_logging=True)
 
@@ -47,23 +47,6 @@ def configure_logging(log_file_name, search_log_file_name, log_level, log_format
 
         _search_logging.setLevel(logging.INFO)
         _search_logging.addHandler(handler_search_file)
-
-
-def get_connect_uri(protocol, resource, address, port=None, user=None, password=None) -> str:
-    """
-    Формирует URL для подключения к сервисам
-    :param protocol: протокол подключения (redis, mongodb, http)
-    :param resource: ресурс подключения (db_number, db_name, endpoint)
-    :param address: адрес
-    :param port: порт
-    :param user: имя пользователя
-    :param password: пароль пользователя
-    :return: URI подключения к в формате protocol://[user:password@]address[:port]/resource
-    """
-    user_str = f'{user}{f":{password}" if password else ""}@' if user else ''
-    port_str = f':{port}' if port else ''
-
-    return '%s://%s%s%s/%s' % (protocol, user_str, address, port_str, resource) if address else ''
 
 
 # .env файл для загрузки параметров
@@ -106,7 +89,7 @@ AZM_COMMON_SEARCH_ADDRESS = get_str_env_param('AZM_COMMON_SEARCH_ADDRESS', requi
 AZM_COMMON_SEARCH_PORT = get_int_env_param('AZM_COMMON_SEARCH_PORT', default=8000)
 
 # Вычисляемы параметр для внутреннего удобства
-AZM_COMMON_SEARCH_URL = get_connect_uri('http', '', AZM_COMMON_SEARCH_ADDRESS, AZM_COMMON_SEARCH_PORT)
+AZM_COMMON_SEARCH_URL = get_connect_uri('http', AZM_COMMON_SEARCH_ADDRESS, AZM_COMMON_SEARCH_PORT, '')
 
 # admin param
 # Список имен пользователей Telegram (UserName), которые оладают администраторскими правами
